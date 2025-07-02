@@ -80,14 +80,14 @@ final class NetworkLayerTests: XCTestCase {
                 endpoint: GetMockPostsEndpoint()
             )
             XCTFail(
-                "Se esperaba que la función lanzara un error, pero no lo hizo."
+                "The function was expected to throw an error, but it did not."
             )
         } catch {
             if case .invalidResponse = error as? NetworkError {
-                // correct
+                // Success
             } else {
                 XCTFail(
-                    "Se esperaba NetworkError.invalidResponse pero se recibió \(error)"
+                    "Expected NetworkError.invalidResponse but received \(error)"
                 )
             }
         }
@@ -114,13 +114,13 @@ final class NetworkLayerTests: XCTestCase {
             let _: [MockPost] = try await sut.request(
                 endpoint: GetMockPostsEndpoint()
             )
-            XCTFail("Se esperaba un error de decodificación.")
+            XCTFail("A decoding error was expected.")
         } catch {
             guard case .decodingFailed = error as? NetworkError else {
-                XCTFail("El error no fue .decodingFailed. Fue: \(error)")
+                XCTFail("The error was not .decodingFailed. It was: \(error)")
                 return
             }
-            // correct
+            // Success
         }
     }
 
@@ -138,11 +138,11 @@ final class NetworkLayerTests: XCTestCase {
             )
 
             // Assert
-            print("✅ Éxito al obtener Digimon real: \(birdramon.name)")
+            print("✅ Successfully fetched real Digimon: \(birdramon.name)")
             XCTAssertEqual(birdramon.name, "Birdramon")
 
         } catch {
-            XCTFail("La solicitud al API de Digimon falló con error: \(error)")
+            XCTFail("The request to the Digimon API failed with error: \(error)")
         }
     }
 
@@ -157,14 +157,14 @@ final class NetworkLayerTests: XCTestCase {
             let _: Digimon = try await networkService.request(
                 endpoint: invalidEndpoint
             )
-            XCTFail("Se esperaba un ApiError, pero la solicitud tuvo éxito.")
+            XCTFail("An ApiError was expected, but the request succeeded.")
         } catch let error as ApiError {
             print(
-                "✅ Éxito al recibir error esperado del API: \(error.localizedDescription)"
+                "✅ Successfully received expected API error: \(error.localizedDescription)"
             )
             XCTAssertEqual(error.localizedDescription, "Digimon not found")
         } catch {
-            XCTFail("Se esperaba un ApiError, pero se recibió: \(error)")
+            XCTFail("An ApiError was expected, but a different error was received: \(error)")
         }
     }
 }
